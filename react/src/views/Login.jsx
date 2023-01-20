@@ -15,6 +15,7 @@ export default function Login() {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         };
+        setErrors(null);
         axiosClient.post('/login', payload)
             .then(({data}) => {
                 setUser(data.user);
@@ -23,7 +24,13 @@ export default function Login() {
             .catch(error => {
                 const response = error.response;
                 if (response && response.status === 422) {
-                    setErrors(response.data.errors);
+                    if (response.data.errors) {
+                        setErrors(response.data.errors);
+                    } else {
+                        setErrors({
+                            email: [response.data.message]
+                        });
+                    }
                 }
             });
     }

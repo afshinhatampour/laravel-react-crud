@@ -42,7 +42,7 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials)) {
             return response([
                 'message' => 'Provided email address or password is incorrect'
-            ]);
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
@@ -58,6 +58,6 @@ class AuthController extends Controller
     {
         $user = $request->user();
         $user->currentAccessToken()->delete();
-        return reponse('', Response::HTTP_NO_CONTENT);
+        return response('', Response::HTTP_NO_CONTENT);
     }
 }
